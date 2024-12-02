@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
-        <RootNamespace>day1.test</RootNamespace>
+        <RootNamespace>aoc.test</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

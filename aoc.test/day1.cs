@@ -1,6 +1,4 @@
-﻿using aoc;
-
-namespace day1.test;
+﻿namespace aoc.test;
 
 public class Tests
 {
