@@ -2,7 +2,7 @@ namespace aoc.day2;
 
 public static class Day2
 {
-    public static async Task<int> Part1Calculation(string[] input)
+    public static int Part1Calculation(string[] input)
     {
         return input.Count(Line =>
         {
@@ -16,7 +16,7 @@ public static class Day2
         });
     }
 
-    public static async Task<int> Part2Calculation(string[] input) =>
+    public static int Part2Calculation(string[] input) =>
         input.Count(line =>
         {
             var numbers = line.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
