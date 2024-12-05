@@ -51,14 +51,6 @@ public class Day4
     }
 
 
-    /// <summary>
-    /// Search for the word in the grid in all directions 
-    /// </summary>
-    /// <param name="row"></param>
-    /// <param name="col"></param>
-    /// <param name="direction"></param>
-    /// <param name="directionCol"></param>
-    /// <returns></returns>
     private bool SearchFromPosition(int row, int col, int direction, int directionCol)
     {
         for (int i = 0; i < _wordLenght; i++)
@@ -90,42 +82,19 @@ public class Day4
             }
         }
     }
-    
 
-    private bool IsMas(char c1, char c2, char c3)
-    {
-        return (c1 == 'M' && c2 == 'A' && c3 == 'S');
-    }
 
-    private bool IsSam(char c1, char c2, char c3)
+    bool IsMasOrSam(char a, char b, char c)
     {
-        return (c1 == 'S' && c2 == 'A' && c3 == 'M');
+        return (a == 'M' && b == 'A' && c == 'S') || (a == 'S' && b == 'A' && c == 'M');
     }
 
     private void FindPart2Count()
     {
-        for (int row = 0; row < _rows; row++)
-        {
-            for (int col = 0; col < _cols; col++)
-            {
-                if (_grid[row][col] != 'A') continue;
-                // prevent out of bounds
-                if (row == 0 || row == _rows - 1 || col == 0 || col == _cols - 1) continue;
-
-
-                char topLeft = _grid[row - 1][col - 1];
-                char topRight = _grid[row - 1][col + 1];
-                char bottomLeft = _grid[row + 1][col - 1];
-                char bottomRight = _grid[row + 1][col + 1];
-                bool diag1Mas = IsMas(topLeft, 'A', bottomRight);
-                bool diag1Sam = IsSam(topLeft, 'A', bottomRight);
-                bool diag2Mas = IsMas(topRight, 'A', bottomLeft);
-                bool diag2Sam = IsSam(topRight, 'A', bottomLeft);
-                if ((diag1Mas || diag1Sam) && (diag2Mas || diag2Sam))
-                {
-                    Part2Count++;
-                }
-            }
-        }
+        Part2Count += Enumerable.Range(1, _rows - 2).
+            SelectMany(row => Enumerable.Range(1, _cols - 2)
+                .Where(col => _grid[row][col] == 'A' && IsMasOrSam(_grid[row - 1][col - 1], 'A', _grid[row + 1][col + 1]) &&
+                              IsMasOrSam(_grid[row - 1][col + 1], 'A', _grid[row + 1][col - 1])))
+            .Count();
     }
 }
