@@ -126,7 +126,7 @@ jobs:
         run: dotnet build --no-restore --configuration Release
   
       - name: Run Benchmarks
-        run: dotnet run --project aoc --configuration Release -- ./inputs
+        run: dotnet run --project aoc --configuration Release
         continue-on-error: true # Prevent the workflow from failing due to benchmark warnings
         working-directory: .
   
