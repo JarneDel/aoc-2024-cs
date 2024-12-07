@@ -164,22 +164,7 @@ public class Day6
     {
         return RightTurns[(int)direction];
     }
-
-
-    private void Reset()
-    {
-        for (int i = 0; i < _originalMap.GetLength(0); i++)
-        {
-            for (int j = 0; j < _originalMap.GetLength(1); j++)
-            {
-                Map[i, j] = _originalMap[i, j];
-            }
-        }
-
-        _playerPosition = _originalPlayerPosition;
-        _playerDirection = _originalPlayerDirection;
-        _hasWon = false;
-    }
+    
 
 
     public Entity this[Vector2Int position]
