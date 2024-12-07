@@ -1,5 +1,3 @@
-using System.Numerics;
-
 namespace aoc.day6;
 
 public class Day6
@@ -30,23 +28,23 @@ public class Day6
         _originalMap = Map.Clone() as Entity[,] ?? throw new Exception("Map is null");
         _mapSize = (Map.GetLength(0), Map.GetLength(1));
     }
-    
-    
+
+
     private static readonly Vector2Int[] DirectionVectors =
     [
-        new(-1,0), // Up
-        new(0,1),  // Right
-        new(1,0),  // Down
-        new(0,-1)  // Left
+        new(-1, 0), // Up
+        new(0, 1), // Right
+        new(1, 0), // Down
+        new(0, -1) // Left
     ];
+
     private static readonly PlayerDirection[] RightTurns =
     [
         PlayerDirection.Right, // Up turns right to Right
-        PlayerDirection.Down,  // Right turns right to Down
-        PlayerDirection.Left,  // Down turns right to Left
-        PlayerDirection.Up     // Left turns right to Up
+        PlayerDirection.Down, // Right turns right to Down
+        PlayerDirection.Left, // Down turns right to Left
+        PlayerDirection.Up // Left turns right to Up
     ];
-    
 
 
     public void Part1()
@@ -61,38 +59,112 @@ public class Day6
     }
 
 
-    public void Part2()
+    public int Part2()
     {
         Part1();
-        Reset();
-
-        HashSet<(Vector2Int Position, PlayerDirection Direction)> visitedStates = [];
+        // Clone visited locations for safe parallel access
         var clonedVisitedLocations = new HashSet<Vector2Int>(_visitedLocations);
 
-        foreach (Vector2Int position in clonedVisitedLocations)
+        // Thread-safe counter for loops
+        int totalLoops = 0;
+
+        // Use Parallel.ForEach to process each position in clonedVisitedLocations
+        Parallel.ForEach(clonedVisitedLocations, position =>
         {
-            if (this[position] == Entity.Empty || this[position] == Entity.Visited)
+            // Create local state for the current iteration
+            var localMap = _originalMap.Clone() as Entity[,];
+            var localPlayerPosition = _originalPlayerPosition;
+            var localPlayerDirection = _originalPlayerDirection;
+            bool localHasWon = false;
+            var localVisitedStates = new HashSet<(Vector2Int Position, PlayerDirection Direction)>();
+
+            // Modify the map for the current position
+            if (localMap[position.X, position.Y] == Entity.Empty || localMap[position.X, position.Y] == Entity.Visited)
             {
-                this[position] = Entity.Obstacle;
+                localMap[position.X, position.Y] = Entity.Obstacle;
             }
 
-
-            while (!_hasWon)
+            // Simulate movements until winning or a loop is detected
+            while (!localHasWon)
             {
-                Move();
-                CheckIsWin();
-                bool isAdded = visitedStates.Add((_playerPosition, _playerDirection));
+                // Simulate a move
+                (localPlayerPosition, localPlayerDirection, localHasWon) = SimulateMove(
+                    localMap,
+                    localPlayerPosition,
+                    localPlayerDirection,
+                    _mapSize
+                );
 
+                // Detect loops
+                bool isAdded = localVisitedStates.Add((localPlayerPosition, localPlayerDirection));
                 if (!isAdded)
                 {
-                    AmountOfLoops += 1;
+                    Interlocked.Increment(ref totalLoops);
                     break;
                 }
-            } 
-            Reset();
-            visitedStates.Clear();
-        }
+            }
+        });
+
+        AmountOfLoops = totalLoops;
+        return totalLoops;
     }
+
+    // Helper method to simulate a move
+    private (Vector2Int newPosition, PlayerDirection newDirection, bool hasWon) SimulateMove(
+        Entity[,] map,
+        Vector2Int currentPosition,
+        PlayerDirection currentDirection,
+        (int Rows, int Cols) mapSize)
+    {
+        bool obstacleAhead = false;
+        PlayerDirection direction = currentDirection;
+        Vector2Int position = currentPosition;
+
+        do
+        {
+            Vector2Int nextPosition = new Vector2Int(
+                position.X + DirectionVectors[(int)direction].X,
+                position.Y + DirectionVectors[(int)direction].Y
+            );
+
+            Entity pos = map[nextPosition.X, nextPosition.Y];
+            switch (pos)
+            {
+                case Entity.Obstacle:
+                    direction = TurnRight(direction);
+                    obstacleAhead = true;
+                    break;
+                case Entity.Empty:
+                case Entity.Visited:
+                    map[position.X, position.Y] = Entity.Visited;
+                    position = nextPosition;
+                    map[position.X, position.Y] = Entity.Player;
+                    obstacleAhead = false;
+                    break;
+                case Entity.Player:
+                    throw new Exception("Player is already there");
+            }
+        } while (obstacleAhead);
+
+        // Check win condition
+        bool hasWon = direction switch
+        {
+            PlayerDirection.Up => position.X == 0,
+            PlayerDirection.Right => position.Y == mapSize.Cols - 1,
+            PlayerDirection.Down => position.X == mapSize.Rows - 1,
+            PlayerDirection.Left => position.Y == 0,
+            _ => throw new ArgumentOutOfRangeException()
+        };
+
+        return (position, direction, hasWon);
+    }
+
+    // Helper to turn right
+    private PlayerDirection TurnRight(PlayerDirection direction)
+    {
+        return RightTurns[(int)direction];
+    }
+
 
     private void Reset()
     {
@@ -102,7 +174,8 @@ public class Day6
             {
                 Map[i, j] = _originalMap[i, j];
             }
-        }        
+        }
+
         _playerPosition = _originalPlayerPosition;
         _playerDirection = _originalPlayerDirection;
         _hasWon = false;
@@ -131,7 +204,6 @@ public class Day6
         _visitedLocations.Add(_playerPosition);
         this[_playerPosition] = Entity.Visited;
     }
-
 
 
     private void Move()
@@ -171,7 +243,7 @@ public class Day6
             _playerPosition.Y + DirectionVectors[(int)_playerDirection].Y
         );
     }
- 
+
 
     private Entity[,] Convert(List<string> mapRaw)
     {
