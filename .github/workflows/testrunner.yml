@@ -112,6 +112,10 @@ jobs:
             --source "aoc" \
             --destination "./inputs" \
             --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}"
+          
+      - name: Copy input files to output directory
+        run: |
+          cp ./inputs/* ./aoc/bin/Release/net9.0/
   
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v3
