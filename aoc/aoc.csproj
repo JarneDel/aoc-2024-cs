@@ -8,11 +8,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Content Include="../inputs/**" >
+        <Content Include="../inputs/**">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <Link>inputs\%(RecursiveDir)%(Filename)%(Extension)</Link>
         </Content>
     </ItemGroup>
-
     <ItemGroup>
       <PackageReference Include="BenchmarkDotNet" Version="0.14.0" />
     </ItemGroup>

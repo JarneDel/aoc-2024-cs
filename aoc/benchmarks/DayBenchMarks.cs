@@ -9,7 +9,7 @@ namespace aoc.benchmarks
 {
     public class DayBenchmarks
     {
-        private const string BasePath = "day";
+        private const string BasePath = "./inputs/day";
         private const string Extension = ".txt";
 
         [Benchmark]

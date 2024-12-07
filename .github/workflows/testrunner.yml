@@ -128,7 +128,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: benchmark-results
-          path: YourBenchmarkProjectPath/BenchmarkDotNet.Artifacts/results
+          path: "**/BenchmarkDotNet.Artifacts/results/aoc.benchmarks.DayBenchmarks-report-github.md"
           retention-days: 7
   
       - name: Post Benchmark Results (PR Only)
