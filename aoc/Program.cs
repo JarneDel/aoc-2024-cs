@@ -4,6 +4,7 @@ using aoc;
 using aoc.day2;
 using aoc.day3;
 using aoc.day4;
+using aoc.day5;
 
 
 const string basePath = "day";
@@ -19,3 +20,5 @@ Console.WriteLine(Day3.Part2CalculationFile(basePath + 3 + extension));
 var day4 = new Day4(basePath + 4 + extension);
 Console.WriteLine(day4.Part1Count);
 Console.WriteLine(day4.Part2Count);
+var day5 = new Day5(basePath + 5 + extension);
+Console.WriteLine(day5.Part1Result);
