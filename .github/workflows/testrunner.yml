@@ -128,7 +128,7 @@ jobs:
       - name: Run Benchmarks
         run: dotnet run --project aoc --configuration Release
         continue-on-error: true # Prevent the workflow from failing due to benchmark warnings
-        working-directory: .
+#        working-directory: .
   
       - name: Save Benchmark Results
         uses: actions/upload-artifact@v4
