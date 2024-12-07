@@ -45,5 +45,13 @@ public class Day5Test
         var day5 = new Day5(_rules, _data);
         Assert.That(day5.Part1Result, Is.EqualTo(143));
     }
+
+
+    [Test]
+    public void Day5Part2()
+    {
+        var day5 = new Day5(_rules, _data);
+        Assert.That(day5.Part2Result, Is.EqualTo(123));
+    }
     
 }

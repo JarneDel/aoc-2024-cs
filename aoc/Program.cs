@@ -22,3 +22,4 @@ Console.WriteLine(day4.Part1Count);
 Console.WriteLine(day4.Part2Count);
 var day5 = new Day5(basePath + 5 + extension);
 Console.WriteLine(day5.Part1Result);
+Console.WriteLine(day5.Part2Result);
