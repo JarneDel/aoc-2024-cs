@@ -1,3 +1,5 @@
+using System.Numerics;
+
 namespace aoc.day6;
 
 public class Day6
@@ -60,15 +62,27 @@ public class Day6
 
     public void Part2()
     {
+        Part1();
+        List<Vector2Int> visitedLocations = new();
+        for (int i = 0; i < _mapSize.Item1; i++)
+        {
+            for (int j = 0; j < _mapSize.Item2; j++)
+            {
+                if (this[new Vector2Int(i, j)] == Entity.Visited)
+                {
+                    visitedLocations.Add(new Vector2Int(i, j));
+                }
+            }
+        }
+        
         Reset();
 
-        int totalPossibleExtraObstacles = _mapSize.Item1 * _mapSize.Item2;
         HashSet<(Vector2Int Position, PlayerDirection Direction)> visitedStates = [];
 
-        for (int i = 0; i < totalPossibleExtraObstacles; i++)
+        for (int i = 0; i < visitedLocations.Count; i++)
         {
 
-            Vector2Int position = new(i / _mapSize.Item2, i % _mapSize.Item2);
+            Vector2Int position = visitedLocations[i];
             if (this[position] == Entity.Empty || this[position] == Entity.Visited)
             {
                 this[position] = Entity.Obstacle;
