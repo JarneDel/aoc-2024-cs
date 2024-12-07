@@ -8,10 +8,11 @@ public class Day6
     private readonly Entity[,] _originalMap;
     private PlayerDirection _originalPlayerDirection;
     private Vector2Int _originalPlayerPosition;
-    private PlayerDirection _playerDirection;
+    private PlayerDirection _playerDirection = PlayerDirection.Up;
     private bool _hasWon = false;
     private Vector2Int _playerPosition;
     private readonly (int, int) _mapSize;
+    private HashSet<Vector2Int> _visitedLocations = new();
 
     public int VisitedLocationCount { get; set; }
     public int AmountOfLoops { get; set; }
@@ -63,26 +64,13 @@ public class Day6
     public void Part2()
     {
         Part1();
-        List<Vector2Int> visitedLocations = new();
-        for (int i = 0; i < _mapSize.Item1; i++)
-        {
-            for (int j = 0; j < _mapSize.Item2; j++)
-            {
-                if (this[new Vector2Int(i, j)] == Entity.Visited)
-                {
-                    visitedLocations.Add(new Vector2Int(i, j));
-                }
-            }
-        }
-        
         Reset();
 
         HashSet<(Vector2Int Position, PlayerDirection Direction)> visitedStates = [];
+        var clonedVisitedLocations = new HashSet<Vector2Int>(_visitedLocations);
 
-        for (int i = 0; i < visitedLocations.Count; i++)
+        foreach (Vector2Int position in clonedVisitedLocations)
         {
-
-            Vector2Int position = visitedLocations[i];
             if (this[position] == Entity.Empty || this[position] == Entity.Visited)
             {
                 this[position] = Entity.Obstacle;
@@ -140,6 +128,7 @@ public class Day6
 
         if (!hasWon) return;
         _hasWon = true;
+        _visitedLocations.Add(_playerPosition);
         this[_playerPosition] = Entity.Visited;
     }
 
@@ -163,7 +152,7 @@ public class Day6
                     this[_playerPosition] = Entity.Visited;
                     _playerPosition = nextPosition;
                     this[_playerPosition] = Entity.Player;
-                    VisitedLocationCount += 1;
+                    _visitedLocations.Add(_playerPosition);
                     obstacleAhead = false;
                     break;
                 case Entity.Player:
@@ -199,19 +188,8 @@ public class Day6
                         map[i, j] = Entity.Obstacle;
                         break;
                     case '^':
-                    case '>':
-                    case '<':
-                    case 'v':
                         map[i, j] = Entity.Player;
                         _playerPosition = new Vector2Int(i, j);
-                        _playerDirection = character switch
-                        {
-                            '^' => PlayerDirection.Up,
-                            '>' => PlayerDirection.Right,
-                            '<' => PlayerDirection.Left,
-                            'v' => PlayerDirection.Down,
-                            _ => throw new ArgumentOutOfRangeException()
-                        };
                         _originalPlayerDirection = _playerDirection;
                         _originalPlayerPosition = _playerPosition;
                         break;
