@@ -21,6 +21,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: mkdir inputs
+        run: mkdir inputs
+
+      - name: Download files from Azure Blob Storage
+        run: |
+          az storage blob download-batch \
+            --source "aoc" \
+            --destination "./inputs" \
+            --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}"
+
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v3
         with:
@@ -138,8 +148,3 @@ jobs:
           recreate: true
           path: "**/BenchmarkDotNet.Artifacts/results/*.md"
           
-      - name: Publish benchmark Results
-        uses: EnricoMi/publish-unit-test-result-action@v2.16.1
-        if: always()
-        with:
-          files: "**/BenchmarkDotNet.Artifacts/results/*.md"
