@@ -103,6 +103,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y azure-cli
           
+      - name: mkdir inputs
+        run: mkdir inputs
+          
       - name: Download files from Azure Blob Storage
         run: |
           az storage blob download-batch \
