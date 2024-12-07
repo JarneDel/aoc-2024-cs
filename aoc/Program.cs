@@ -6,7 +6,7 @@ using aoc.day4;
 using aoc.day5;
 using BenchmarkDotNet.Running;
 
-const string basePath = "day";
+const string basePath = "./day";
 const string extension = ".txt";
 Console.WriteLine(await Day1.RunAsync(basePath + 1 + extension));
 
