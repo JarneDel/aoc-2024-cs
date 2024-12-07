@@ -25,6 +25,7 @@ public class Day4Tests
     public void FindXmasCount()
     {
         var day4 = new Day4(_grid);
+        day4.FindXmasCount();
         Assert.That(day4.Part1Count, Is.EqualTo(18));
     }
 
@@ -40,6 +41,7 @@ public class Day4Tests
             "SAMX"
         };
         var day4 = new Day4(simpList);
+        day4.FindXmasCount();
         Assert.That(day4.Part1Count, Is.EqualTo(4));
     }
     
@@ -54,6 +56,7 @@ public class Day4Tests
             "X..S"
         };
         var day4 = new Day4(simpList);
+        day4.FindXmasCount();
         Assert.That(day4.Part1Count, Is.EqualTo(2));
     }
     
@@ -68,12 +71,13 @@ public class Day4Tests
             "S..S"
         };
         var day4 = new Day4(simpList);
+        day4.FindXmasCount();
         Assert.That(day4.Part1Count, Is.EqualTo(2));
     }
     [Test]
     public void FindXmasCountDiagonalInverse()
     {
-        List<string> simpList = new List<string>
+        List<string> simpList = new()
         {
             "S..S",
             ".AA.",
@@ -81,19 +85,8 @@ public class Day4Tests
             "X..X"
         };
         var day4 = new Day4(simpList);
+        day4.FindXmasCount();
         Assert.That(day4.Part1Count, Is.EqualTo(2));
-    }
-
-    [Test]
-    public void FindProblem()
-    {
-        List<string> simpList = new List<string>
-        {
-            "X...",
-            ".M..",
-            "..A.",
-            "...S"
-        };
     }
     
     
@@ -101,6 +94,7 @@ public class Day4Tests
     public void FindPart2Count()
     {
         var day4 = new Day4(_grid);
+        day4.FindPart2Count();
         Assert.That(day4.Part2Count, Is.EqualTo(9));
     }
 }
