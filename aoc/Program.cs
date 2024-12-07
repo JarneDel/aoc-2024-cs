@@ -16,10 +16,12 @@ Console.WriteLine(await Day2.Part2Calculation(basePath + 2 + extension));
 Console.WriteLine(Day3.Part1CalculationFile(basePath + 3 + extension));
 Console.WriteLine(Day3.Part2CalculationFile(basePath + 3 + extension));
 var day4 = new Day4(basePath + 4 + extension);
+day4.FindPart2Count();
+day4.FindXmasCount();
 Console.WriteLine(day4.Part1Count);
 Console.WriteLine(day4.Part2Count);
 var day5 = new Day5(basePath + 5 + extension);
-Console.WriteLine(day5.Part1Result);
-Console.WriteLine(day5.Part2Result);
+Console.WriteLine(day5.CalculatePart1());
+Console.WriteLine(day5.CalculatePart2());
 
 BenchmarkRunner.Run<DayBenchmarks>();

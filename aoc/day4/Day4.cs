@@ -31,8 +31,6 @@ public class Day4
         _rows = grid.Count;
         _cols = grid[0].Length;
         _grid = grid;
-        FindXmasCount();
-        FindPart2Count();
     }
 
     public Day4(List<string> grid)
@@ -40,8 +38,6 @@ public class Day4
         _rows = grid.Count;
         _cols = grid[0].Length;
         _grid = grid;
-        FindXmasCount();
-        FindPart2Count();
     }
 
 
@@ -75,7 +71,7 @@ public class Day4
     }
 
 
-    private void FindXmasCount()
+    public void FindXmasCount()
     {
         for (int row = 0; row < _rows; row++)
         {
@@ -102,7 +98,7 @@ public class Day4
         return (c1 == 'S' && c2 == 'A' && c3 == 'M');
     }
 
-    private void FindPart2Count()
+    public void FindPart2Count()
     {
         for (int row = 0; row < _rows; row++)
         {

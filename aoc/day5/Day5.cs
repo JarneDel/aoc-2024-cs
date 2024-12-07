@@ -6,6 +6,11 @@ public class Day5
     public int Part1Result { get; private set; }
     public int Part2Result { get; private set; }
     
+    private List<Rule> Rules { get; set; } = [];
+    private List<int[]> Updates { get; set; } = [];
+    
+    
+    
     public Day5(string filename)
     {
         var stream = new StreamReader(filename);
@@ -14,16 +19,12 @@ public class Day5
     
     public Day5(string[] rules, string[] data)
     {
-        List<Rule> parsedRules = ParseRules(rules);
-        List<int[]> parsedData = data.Select(x => x.Split(',', StringSplitOptions.TrimEntries).Select(int.Parse).ToArray()).ToList();
-        CalculatePart1(parsedRules, parsedData);
-        CalculatePart2(parsedRules, parsedData);
+        Rules = ParseRules(rules); 
+        Updates = data.Select(x => x.Split(',', StringSplitOptions.TrimEntries).Select(int.Parse).ToArray()).ToList();
     }
 
     private void ParseFile(StreamReader stream)
     {
-        List<Rule> rules = [];
-        List<int[]> data = [];
         while (stream.ReadLine() is { } line)
         {
             if (string.IsNullOrEmpty(line))
@@ -33,46 +34,48 @@ public class Day5
             if (line.Contains('|'))
             {
                 string[] split = line.Split('|', StringSplitOptions.TrimEntries);
-                rules.Add(new Rule(int.Parse(split[0]), int.Parse(split[1])));
+                Rules.Add(new Rule(int.Parse(split[0]), int.Parse(split[1])));
             }
             else
             {
                 string[] items = line.Split(',', StringSplitOptions.TrimEntries);
-                data.Add(items.Select(int.Parse).ToArray());
+                Updates.Add(items.Select(int.Parse).ToArray());
             }
         }
-        CalculatePart1(rules, data);
-        CalculatePart2(rules, data);
     }
     
 
-    private void CalculatePart1(List<Rule> rules, List<int[]> updates)
+    public int CalculatePart1()
     {
-        foreach (int[] update in updates)
+        foreach (int[] update in Updates)
         {
-            if (!IsUpdateCorrect(update, rules)) continue;
+            if (!IsUpdateCorrect(update, Rules)) continue;
             int count = update.Length;
             if (count % 2 != 1) continue;
             int medianIndex = count / 2;
             Part1Result += update[medianIndex];
         }
+
+        return Part1Result;
     }
 
-    private void CalculatePart2(List<Rule> rules, List<int[]> updates)
+    public int CalculatePart2()
     {
-        foreach (int[] update in updates)
+        foreach (int[] update in Updates)
         {
-            if (!IsUpdateCorrect(update, rules))
+            if (!IsUpdateCorrect(update, Rules))
             {
                 // try fix update
-                List<int> fixedOrder = FixOrder(update.ToList(), rules);
+                List<int> fixedOrder = FixOrder(update.ToList(), Rules);
                 Part2Result += fixedOrder[fixedOrder.Count / 2];
 
             }
         }
-        
-        
-        
+
+        return Part2Result;
+
+
+
     }
 
     private static List<int> FixOrder(List<int> update, List<Rule> rules)

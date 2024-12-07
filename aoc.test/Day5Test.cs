@@ -43,7 +43,7 @@ public class Day5Test
     public void Day5Part1()
     {
         var day5 = new Day5(_rules, _data);
-        Assert.That(day5.Part1Result, Is.EqualTo(143));
+        Assert.That(day5.CalculatePart1(), Is.EqualTo(143));
     }
 
 
@@ -51,7 +51,7 @@ public class Day5Test
     public void Day5Part2()
     {
         var day5 = new Day5(_rules, _data);
-        Assert.That(day5.Part2Result, Is.EqualTo(123));
+        Assert.That(day5.CalculatePart2(), Is.EqualTo(123));
     }
     
 }
