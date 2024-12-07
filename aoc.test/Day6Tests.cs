@@ -36,4 +36,12 @@ public class Day6Tests
         day6.Part2();
         Assert.That(day6.AmountOfLoops, Is.EqualTo(6));
     }
+    
+    [Test]
+    public void Day6Part2WithFullMap()
+    {
+        var day6 = new Day6("./inputs/day6.txt");
+        day6.Part2();
+        Assert.That(day6.AmountOfLoops, Is.EqualTo(1911));
+    }
 }

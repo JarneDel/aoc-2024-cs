@@ -4,11 +4,15 @@ using aoc.day2;
 using aoc.day3;
 using aoc.day4;
 using aoc.day5;
+using aoc.day6;
+using BenchmarkDotNet.Engines;
 
 namespace aoc.benchmarks
 {
-    [IterationCount(5)]
-    [InvocationCount(50)]
+    [MaxIterationCount(50)]
+    [InvocationCount(5)]
+    [SimpleJob(RunStrategy.Throughput)]
+
     public class DayBenchmarks
     {
         private const string BasePath = "./inputs/day";
@@ -73,5 +77,22 @@ namespace aoc.benchmarks
             var day5 = new Day5(BasePath + 5 + Extension);
             return day5.CalculatePart2();
         }
+        
+        [Benchmark]
+        public int Day6Part1Benchmark()
+        {
+            var day6 = new Day6(BasePath + 6 + Extension);
+            day6.Part1();
+            return day6.VisitedLocationCount;
+        }
+        
+        [Benchmark]
+        public int Day6Part2Benchmark()
+        {
+            var day6 = new Day6(BasePath + 6 + Extension);
+            day6.Part2();
+            return day6.AmountOfLoops;
+        }
+        
     }
 }

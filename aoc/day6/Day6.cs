@@ -27,6 +27,24 @@ public class Day6
         _originalMap = Map.Clone() as Entity[,] ?? throw new Exception("Map is null");
         _mapSize = (Map.GetLength(0), Map.GetLength(1));
     }
+    
+    
+    private static readonly Vector2Int[] DirectionVectors =
+    [
+        new(-1,0), // Up
+        new(0,1),  // Right
+        new(1,0),  // Down
+        new(0,-1)  // Left
+    ];
+    private static readonly PlayerDirection[] RightTurns =
+    [
+        PlayerDirection.Right, // Up turns right to Right
+        PlayerDirection.Down,  // Right turns right to Down
+        PlayerDirection.Left,  // Down turns right to Left
+        PlayerDirection.Up     // Left turns right to Up
+    ];
+    
+
 
     public void Part1()
     {
@@ -45,9 +63,10 @@ public class Day6
         Reset();
 
         int totalPossibleExtraObstacles = _mapSize.Item1 * _mapSize.Item2;
+        HashSet<(Vector2Int Position, PlayerDirection Direction)> visitedStates = [];
+
         for (int i = 0; i < totalPossibleExtraObstacles; i++)
         {
-            HashSet<(Vector2Int Position, PlayerDirection Direction)> visitedStates = [];
 
             Vector2Int position = new(i / _mapSize.Item2, i % _mapSize.Item2);
             if (this[position] == Entity.Empty || this[position] == Entity.Visited)
@@ -64,18 +83,24 @@ public class Day6
 
                 if (!isAdded)
                 {
-                    Console.WriteLine("crossing at " + _playerPosition + " with direction " + _playerDirection);
                     AmountOfLoops += 1;
                     break;
                 }
             } 
             Reset();
+            visitedStates.Clear();
         }
     }
 
     private void Reset()
     {
-        Map.Reset(_originalMap);
+        for (int i = 0; i < _originalMap.GetLength(0); i++)
+        {
+            for (int j = 0; j < _originalMap.GetLength(1); j++)
+            {
+                Map[i, j] = _originalMap[i, j];
+            }
+        }        
         _playerPosition = _originalPlayerPosition;
         _playerDirection = _originalPlayerDirection;
         _hasWon = false;
@@ -90,51 +115,25 @@ public class Day6
 
     private void CheckIsWin()
     {
-        // if player -> down, and player position is at the bottom of the map -> win, idem for the other directions
-        switch (_playerDirection)
+        bool hasWon = _playerDirection switch
         {
-            case PlayerDirection.Up:
-                if (_playerPosition.X == 0)
-                {
-                    _hasWon = true;
-                }
+            PlayerDirection.Up => _playerPosition.X == 0,
+            PlayerDirection.Right => _playerPosition.Y == _mapSize.Item2 - 1,
+            PlayerDirection.Down => _playerPosition.X == _mapSize.Item1 - 1,
+            PlayerDirection.Left => _playerPosition.Y == 0,
+            _ => throw new ArgumentOutOfRangeException()
+        };
 
-                break;
-            case PlayerDirection.Right:
-                if (_playerPosition.Y == _mapSize.Item2 - 1)
-                {
-                    _hasWon = true;
-                }
-
-                break;
-            case PlayerDirection.Down:
-                if (_playerPosition.X == _mapSize.Item1 - 1)
-                {
-                    _hasWon = true;
-                }
-
-                break;
-            case PlayerDirection.Left:
-                if (_playerPosition.Y == 0)
-                {
-                    _hasWon = true;
-                }
-
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-
-        if (_hasWon)
-        {
-            this[_playerPosition] = Entity.Visited;
-        }
+        if (!hasWon) return;
+        _hasWon = true;
+        this[_playerPosition] = Entity.Visited;
     }
+
 
 
     private void Move()
     {
-        bool isObstacleInFront = false;
+        bool obstacleAhead = false;
         do
         {
             Vector2Int nextPosition = WhereTo();
@@ -143,49 +142,31 @@ public class Day6
             {
                 case Entity.Obstacle:
                     _playerDirection = TurnRight();
-                    isObstacleInFront = true;
+                    obstacleAhead = true;
                     break;
                 case Entity.Empty:
                 case Entity.Visited:
                     this[_playerPosition] = Entity.Visited;
                     _playerPosition = nextPosition;
                     this[_playerPosition] = Entity.Player;
-                    isObstacleInFront = false;
+                    VisitedLocationCount += 1;
+                    obstacleAhead = false;
                     break;
                 case Entity.Player:
                     throw new Exception("Player is already there");
             }
-        } while (isObstacleInFront);
+        } while (obstacleAhead);
     }
 
-    private PlayerDirection TurnRight()
-    {
-        return _playerDirection switch
-        {
-            PlayerDirection.Up => PlayerDirection.Right,
-            PlayerDirection.Right => PlayerDirection.Down,
-            PlayerDirection.Down => PlayerDirection.Left,
-            PlayerDirection.Left => PlayerDirection.Up,
-            _ => throw new ArgumentOutOfRangeException()
-        };
-    }
+    private PlayerDirection TurnRight() => RightTurns[(int)_playerDirection];
 
 
     private Vector2Int WhereTo()
     {
-        switch (_playerDirection)
-        {
-            case PlayerDirection.Up:
-                return _playerPosition with { X = _playerPosition.X - 1 };
-            case PlayerDirection.Right:
-                return _playerPosition with { Y = _playerPosition.Y + 1 };
-            case PlayerDirection.Down:
-                return _playerPosition with { X = _playerPosition.X + 1 };
-            case PlayerDirection.Left:
-                return _playerPosition with { Y = _playerPosition.Y - 1 };
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
+        return new Vector2Int(
+            _playerPosition.X + DirectionVectors[(int)_playerDirection].X,
+            _playerPosition.Y + DirectionVectors[(int)_playerDirection].Y
+        );
     }
  
 
@@ -261,22 +242,8 @@ public struct Vector2Int(int x, int y) : IEquatable<Vector2Int>
 
     public override int GetHashCode() => HashCode.Combine(X, Y);
 
-    public static Vector2Int operator +(Vector2Int a, Vector2Int b) => new Vector2Int(a.X + b.X, a.Y + b.Y);
-    public static Vector2Int operator -(Vector2Int a, Vector2Int b) => new Vector2Int(a.X - b.X, a.Y - b.Y);
+    public static Vector2Int operator +(Vector2Int a, Vector2Int b) => new(a.X + b.X, a.Y + b.Y);
+    public static Vector2Int operator -(Vector2Int a, Vector2Int b) => new(a.X - b.X, a.Y - b.Y);
     public static bool operator ==(Vector2Int a, Vector2Int b) => a.Equals(b);
     public static bool operator !=(Vector2Int a, Vector2Int b) => !a.Equals(b);
-}
-
-public static class MapExtensions
-{
-    public static void Reset(this Entity[,] map, Entity[,] originalMap)
-    {
-        for (int i = 0; i < map.GetLength(0); i++)
-        {
-            for (int j = 0; j < map.GetLength(1); j++)
-            {
-                map[i, j] = originalMap[i, j];
-            }
-        }
-    }
 }
