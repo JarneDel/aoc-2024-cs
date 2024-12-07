@@ -138,8 +138,3 @@ jobs:
           recreate: true
           path: "**/BenchmarkDotNet.Artifacts/results/*.md"
           
-      - name: Publish benchmark Results
-        uses: EnricoMi/publish-unit-test-result-action@v2.16.1
-        if: always()
-        with:
-          files: "**/BenchmarkDotNet.Artifacts/results/*.md"
