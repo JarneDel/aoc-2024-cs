@@ -89,6 +89,39 @@ jobs:
         if: always()
         with:
           trx_files: "${{ github.workspace }}/**/*.trx"
-
-
+  benchmark:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
   
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '9.0'
+  
+      - name: Restore dependencies
+        run: dotnet restore
+  
+      - name: Build for Benchmark
+        run: dotnet build --no-restore --configuration Release
+  
+      - name: Run Benchmarks
+        run: dotnet run --project YourBenchmarkProjectPath --configuration Release
+        continue-on-error: true # Prevent the workflow from failing due to benchmark warnings
+  
+      - name: Save Benchmark Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: YourBenchmarkProjectPath/BenchmarkDotNet.Artifacts/results
+          retention-days: 7
+  
+      - name: Post Benchmark Results (PR Only)
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
+        with:
+          recreate: true
+          path: YourBenchmarkProjectPath/BenchmarkDotNet.Artifacts/results/*.md

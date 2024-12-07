@@ -1,16 +1,14 @@
-﻿
-using System.Net.Mime;
-using aoc;
+﻿using aoc;
+using aoc.benchmarks;
 using aoc.day2;
 using aoc.day3;
 using aoc.day4;
 using aoc.day5;
-
+using BenchmarkDotNet.Running;
 
 const string basePath = "day";
 const string extension = ".txt";
-Console.WriteLine(await Day1.RunAsync(basePath + 1 + extension ));
-
+Console.WriteLine(await Day1.RunAsync(basePath + 1 + extension));
 
 Console.WriteLine(await Day2.Part1CalculationWithStreamReader(basePath + 2 + extension));
 Console.WriteLine(await Day2.Part2Calculation(basePath + 2 + extension));
@@ -23,3 +21,5 @@ Console.WriteLine(day4.Part2Count);
 var day5 = new Day5(basePath + 5 + extension);
 Console.WriteLine(day5.Part1Result);
 Console.WriteLine(day5.Part2Result);
+
+BenchmarkRunner.Run<DayBenchmarks>();
