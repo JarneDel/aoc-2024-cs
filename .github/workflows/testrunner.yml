@@ -98,9 +98,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Download all files with wget
+      - name: Install Azure CLI
         run: |
-          wget -r -np -nH --cut-dirs=1 --reject "index.html*" "https://jarnedel.blob.core.windows.net/aoc/"  
+          sudo apt-get update
+          sudo apt-get install -y azure-cli
+          
+      - name: Download files from Azure Blob Storage
+        run: |
+          az storage blob download-batch \
+            --source "aoc" \
+            --destination "./aoc" \
+            --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}"
   
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v3
