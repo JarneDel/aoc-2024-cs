@@ -93,9 +93,14 @@ jobs:
     permissions: write-all
     runs-on: ubuntu-latest
     
-    steps:
+    steps:     
+    
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Download all files with wget
+        run: |
+          wget -r -np -nH --cut-dirs=1 --reject "index.html*" "https://jarnedel.blob.core.windows.net/aoc/"  
   
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v3
