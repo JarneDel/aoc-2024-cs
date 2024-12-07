@@ -107,7 +107,7 @@ jobs:
         run: |
           az storage blob download-batch \
             --source "aoc" \
-            --destination "./aoc" \
+            --destination "./inputs" \
             --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}"
   
       - name: Setup .NET Core
@@ -122,7 +122,7 @@ jobs:
         run: dotnet build --no-restore --configuration Release
   
       - name: Run Benchmarks
-        run: dotnet run --project YourBenchmarkProjectPath --configuration Release
+        run: dotnet run --project aoc --configuration Release
         continue-on-error: true # Prevent the workflow from failing due to benchmark warnings
   
       - name: Save Benchmark Results
