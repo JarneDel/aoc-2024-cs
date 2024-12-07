@@ -7,6 +7,8 @@ using aoc.day5;
 
 namespace aoc.benchmarks
 {
+    [IterationCount(5)]
+    [InvocationCount(50)]
     public class DayBenchmarks
     {
         private const string BasePath = "./inputs/day";
@@ -46,6 +48,7 @@ namespace aoc.benchmarks
         public int Day4Part1Benchmark()
         {
             var day4 = new Day4(BasePath + 4 + Extension);
+            day4.FindXmasCount();
             return day4.Part1Count;
         }
 
@@ -53,6 +56,7 @@ namespace aoc.benchmarks
         public int Day4Part2Benchmark()
         {
             var day4 = new Day4(BasePath + 4 + Extension);
+            day4.FindPart2Count();
             return day4.Part2Count;
         }
 
@@ -60,14 +64,14 @@ namespace aoc.benchmarks
         public int Day5Part1Benchmark()
         {
             var day5 = new Day5(BasePath + 5 + Extension);
-            return day5.Part1Result;
+            return day5.CalculatePart2();
         }
 
         [Benchmark]
         public int Day5Part2Benchmark()
         {
             var day5 = new Day5(BasePath + 5 + Extension);
-            return day5.Part2Result;
+            return day5.CalculatePart2();
         }
     }
 }

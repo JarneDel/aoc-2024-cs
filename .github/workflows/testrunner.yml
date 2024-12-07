@@ -136,4 +136,4 @@ jobs:
         if: github.event_name == 'pull_request'
         with:
           recreate: true
-          path: YourBenchmarkProjectPath/BenchmarkDotNet.Artifacts/results/*.md
+          path: "**/BenchmarkDotNet.Artifacts/results/*.md"
