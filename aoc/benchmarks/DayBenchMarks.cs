@@ -7,6 +7,8 @@ using aoc.day5;
 
 namespace aoc.benchmarks
 {
+    [IterationCount(5)]
+    [InvocationCount(50)]
     public class DayBenchmarks
     {
         private const string BasePath = "./inputs/day";

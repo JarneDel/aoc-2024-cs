@@ -4,6 +4,7 @@ using aoc.day2;
 using aoc.day3;
 using aoc.day4;
 using aoc.day5;
+using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Running;
 
 const string basePath = "./inputs/day";
@@ -23,5 +24,6 @@ Console.WriteLine(day4.Part2Count);
 var day5 = new Day5(basePath + 5 + extension);
 Console.WriteLine(day5.CalculatePart1());
 Console.WriteLine(day5.CalculatePart2());
+
 
 BenchmarkRunner.Run<DayBenchmarks>();
