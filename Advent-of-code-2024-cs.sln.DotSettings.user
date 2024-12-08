@@ -18,10 +18,11 @@
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;
   &lt;Assembly Path="/home/jarne/RiderProjects/Advent-of-code-2024-cs/aoc/bin/Debug/net9.0/Dia2Lib.dll" /&gt;
 &lt;/AssemblyExplorer&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=0769cd75_002De324_002D4bfc_002D978c_002Da17a358aedc8/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Day8Part1" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=0769cd75_002De324_002D4bfc_002D978c_002Da17a358aedc8/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Day8Part1" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;NUnit3x::7E7CB0B6-9D29-4F9F-AEB5-A25419BD9E3B::net9.0::aoc.test.Day8Tests.Day8Part1&lt;/TestId&gt;
     &lt;TestId&gt;NUnit3x::7E7CB0B6-9D29-4F9F-AEB5-A25419BD9E3B::net9.0::aoc.test.Day8Tests.Day8Part1_2&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::7E7CB0B6-9D29-4F9F-AEB5-A25419BD9E3B::net9.0::aoc.test.Day8Tests.Day8Part2&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8ae9f31e_002D824d_002D44f5_002D9233_002D65279c038fe5/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestShouldPass #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
@@ -31,7 +32,7 @@
     &lt;TestId&gt;NUnit3x::7E7CB0B6-9D29-4F9F-AEB5-A25419BD9E3B::net9.0::aoc.test.Day7Tests.Day1&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d30da697_002D8b7b_002D4988_002Db40f_002Da102cdf46827/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="IncreaseToHight_1" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d30da697_002D8b7b_002D4988_002Db40f_002Da102cdf46827/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="IncreaseToHight_1" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;NUnit3x::7E7CB0B6-9D29-4F9F-AEB5-A25419BD9E3B::net9.0::aoc.test.Day2Tests.IncreaseToHight_1&lt;/TestId&gt;
     &lt;TestId&gt;NUnit3x::7E7CB0B6-9D29-4F9F-AEB5-A25419BD9E3B::net9.0::aoc.test.Day5Test&lt;/TestId&gt;
@@ -46,6 +47,8 @@
     &lt;TestId&gt;NUnit3x::7E7CB0B6-9D29-4F9F-AEB5-A25419BD9E3B::net9.0::aoc.test.Day7Tests.Day1First100&lt;/TestId&gt;
     &lt;TestId&gt;NUnit3x::7E7CB0B6-9D29-4F9F-AEB5-A25419BD9E3B::net9.0::aoc.test.Day7Tests.TestConcat&lt;/TestId&gt;
     &lt;TestId&gt;NUnit3x::7E7CB0B6-9D29-4F9F-AEB5-A25419BD9E3B::net9.0::aoc.test.Day8Tests.Day8Part1&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::7E7CB0B6-9D29-4F9F-AEB5-A25419BD9E3B::net9.0::aoc.test.Day8Tests.Day8Part2&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::7E7CB0B6-9D29-4F9F-AEB5-A25419BD9E3B::net9.0::aoc.test.Day8Tests.Day8Part2_2&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
 	</wpf:ResourceDictionary>

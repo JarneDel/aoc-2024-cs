@@ -65,7 +65,7 @@ public class Day6
     {
         Part1();
         // Clone visited locations for safe parallel access
-        var clonedVisitedLocations = new HashSet<Vector2Int>(_visitedLocations);
+        HashSet<Vector2Int>? clonedVisitedLocations = new(_visitedLocations);
 
         // Thread-safe counter for loops
         int totalLoops = 0;
@@ -74,11 +74,11 @@ public class Day6
         Parallel.ForEach(clonedVisitedLocations, position =>
         {
             // Create local state for the current iteration
-            var localMap = _originalMap.Clone() as Entity[,];
-            var localPlayerPosition = _originalPlayerPosition;
-            var localPlayerDirection = _originalPlayerDirection;
+            Entity[,]? localMap = _originalMap.Clone() as Entity[,];
+            Vector2Int localPlayerPosition = _originalPlayerPosition;
+            PlayerDirection localPlayerDirection = _originalPlayerDirection;
             bool localHasWon = false;
-            var localVisitedStates = new HashSet<(Vector2Int Position, PlayerDirection Direction)>();
+            HashSet<(Vector2Int Position, PlayerDirection Direction)>? localVisitedStates = new();
 
             // Modify the map for the current position
             if (localMap[position.X, position.Y] == Entity.Empty || localMap[position.X, position.Y] == Entity.Visited)
@@ -124,7 +124,7 @@ public class Day6
 
         do
         {
-            Vector2Int nextPosition = new Vector2Int(
+            Vector2Int nextPosition = new(
                 position.X + DirectionVectors[(int)direction].X,
                 position.Y + DirectionVectors[(int)direction].Y
             );

@@ -24,7 +24,7 @@ public class Day4Tests
     [Test]
     public void FindXmasCount()
     {
-        var day4 = new Day4(_grid);
+        Day4? day4 = new(_grid);
         day4.FindXmasCount();
         Assert.That(day4.Part1Count, Is.EqualTo(18));
     }
@@ -33,14 +33,14 @@ public class Day4Tests
     [Test]
     public void FindXmasCountSimple()
     {
-        List<string> simpList = new List<string>
+        List<string> simpList = new()
         {
             "XMAS",
             "MXMA",
             "AMXM",
             "SAMX"
         };
-        var day4 = new Day4(simpList);
+        Day4? day4 = new(simpList);
         day4.FindXmasCount();
         Assert.That(day4.Part1Count, Is.EqualTo(4));
     }
@@ -48,14 +48,14 @@ public class Day4Tests
     [Test]
     public void FindXmasCountDiagonal()
     {
-        List<string> simpList = new List<string>
+        List<string> simpList = new()
         {
             "X..S",
             ".MA.",
             ".MA.",
             "X..S"
         };
-        var day4 = new Day4(simpList);
+        Day4? day4 = new(simpList);
         day4.FindXmasCount();
         Assert.That(day4.Part1Count, Is.EqualTo(2));
     }
@@ -63,14 +63,14 @@ public class Day4Tests
     [Test]
     public void FindXmasCountDiagonal2()
     {
-        List<string> simpList = new List<string>
+        List<string> simpList = new()
         {
             "X..X",
             ".MM.",
             ".AA.",
             "S..S"
         };
-        var day4 = new Day4(simpList);
+        Day4? day4 = new(simpList);
         day4.FindXmasCount();
         Assert.That(day4.Part1Count, Is.EqualTo(2));
     }
@@ -84,7 +84,7 @@ public class Day4Tests
             ".MM.",
             "X..X"
         };
-        var day4 = new Day4(simpList);
+        Day4? day4 = new(simpList);
         day4.FindXmasCount();
         Assert.That(day4.Part1Count, Is.EqualTo(2));
     }
@@ -93,7 +93,7 @@ public class Day4Tests
     [Test]
     public void FindPart2Count()
     {
-        var day4 = new Day4(_grid);
+        Day4? day4 = new(_grid);
         day4.FindPart2Count();
         Assert.That(day4.Part2Count, Is.EqualTo(9));
     }

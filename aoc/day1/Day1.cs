@@ -10,16 +10,16 @@ public class Day1
         using StreamReader file = new(filename);
         while (await file.ReadLineAsync() is { } line)
         {
-            var split = line.Split([' '], StringSplitOptions.RemoveEmptyEntries);
+            string[]? split = line.Split([' '], StringSplitOptions.RemoveEmptyEntries);
             leftList.Add(int.Parse(split[0]));
             rightList.Add(int.Parse(split[1]));
         }
         
-        var result = AddDistances(leftList, rightList);
+        int result = AddDistances(leftList, rightList);
 
         
-        var result2 = CalculateSimilarityScore(leftList, rightList);
-        var result3 = CalulateSimilarityScoreOneLiner(leftList, rightList);
+        int result2 = CalculateSimilarityScore(leftList, rightList);
+        int result3 = CalulateSimilarityScoreOneLiner(leftList, rightList);
         if (result2 != result3)
         {
             throw new Exception("yeet");
@@ -35,7 +35,7 @@ public class Day1
     /// </summary>
     public static int CalculateSimilarityScore(List<int> leftList, List<int> rightList)
     {
-        var sameNumbers = rightList.GroupBy(x => x).ToDictionary(g => g.Key, g => g.Count());
+        Dictionary<int, int>? sameNumbers = rightList.GroupBy(x => x).ToDictionary(g => g.Key, g => g.Count());
         return leftList.Sum(number => number * sameNumbers.GetValueOrDefault(number, 0));
     }
 
@@ -53,7 +53,7 @@ public class Day1
     {
         leftList.Sort();
         rightList.Sort();
-        var differences = leftList.Zip(rightList, (left, right) => Math.Abs(left - right));
+        IEnumerable<int>? differences = leftList.Zip(rightList, (left, right) => Math.Abs(left - right));
         return differences.Sum();
     }
 }

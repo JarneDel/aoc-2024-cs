@@ -13,7 +13,7 @@ public class Day5
     
     public Day5(string filename)
     {
-        var stream = new StreamReader(filename);
+        StreamReader? stream = new(filename);
         ParseFile(stream);
     }
     

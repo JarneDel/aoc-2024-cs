@@ -64,7 +64,7 @@ public class Day7Tests
     [Test]
     public void Day1Line7()
     {
-        var input = new string[]
+        string[]? input = new string[]
         {
             "21316689: 8 8 3 833 67 22 19 19"
         };
@@ -75,7 +75,7 @@ public class Day7Tests
     [Test]
     public void Day1Line2()
     {
-        var input = new string[]
+        string[]? input = new string[]
         {
             "1659517050: 33 8 9 673 51 967",
             "97828: 8 6 6 3 5 70 4 696 5 91 3",
@@ -88,7 +88,7 @@ public class Day7Tests
     [Test]
     public void Day1First100()
     {
-        var file = "./inputs/day7_100.txt";
+        string? file = "./inputs/day7_100.txt";
         Day7 day7 = new(file);
         long result = day7.Part1();
         Assert.That(result, Is.EqualTo(27658973736));

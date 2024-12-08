@@ -27,7 +27,7 @@ public class Day4
 
     public Day4(string Filename)
     {
-        var grid = File.ReadAllLines(Filename).ToList();
+        List<string>? grid = File.ReadAllLines(Filename).ToList();
         _rows = grid.Count;
         _cols = grid[0].Length;
         _grid = grid;

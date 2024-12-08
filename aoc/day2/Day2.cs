@@ -6,7 +6,7 @@ public static class Day2
     {
         return input.Count(Line =>
         {
-            var numbers = Line.Split([' '], StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
+            List<int>? numbers = Line.Split([' '], StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
             return Enumerable.Range(1, numbers.Count - 1).All(i =>
             {
                 int diff = Math.Abs(numbers[i] - numbers[i - 1]);
@@ -19,7 +19,7 @@ public static class Day2
     public static int Part2Calculation(string[] input) =>
         input.Count(line =>
         {
-            var numbers = line.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
+            List<int>? numbers = line.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
             return IsSafe(numbers) || Enumerable.Range(0, numbers.Count)
                 .Any(i => IsSafe(numbers.Where((_, index) => index != i).ToList()));
         });
@@ -33,7 +33,7 @@ public static class Day2
         string? line;
         while ((line = await reader.ReadLineAsync()) != null)
         {
-            var numbers = line.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
+            List<int>? numbers = line.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
 
             if (IsSafe(numbers) || Enumerable.Range(0, numbers.Count).Any(i => IsSafe(numbers.Where((_, index) => index != i).ToList())))
             {
@@ -58,7 +58,7 @@ public static class Day2
         int count = 0;
         while (await file.ReadLineAsync() is { } line)
         {
-            var numbers = line.Split([' '], StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
+            List<int>? numbers = line.Split([' '], StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
             if (Enumerable.Range(1, numbers.Count - 1).All(i =>
                 {
                     int diff = Math.Abs(numbers[i] - numbers[i - 1]);

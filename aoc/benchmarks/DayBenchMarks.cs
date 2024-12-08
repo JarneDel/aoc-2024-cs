@@ -6,6 +6,7 @@ using aoc.day4;
 using aoc.day5;
 using aoc.day6;
 using aoc.day7;
+using aoc.day8;
 using BenchmarkDotNet.Engines;
 
 namespace aoc.benchmarks
@@ -52,7 +53,7 @@ namespace aoc.benchmarks
         [Benchmark]
         public int Day4Part1Benchmark()
         {
-            var day4 = new Day4(BasePath + 4 + Extension);
+            Day4 day4 = new(BasePath + 4 + Extension);
             day4.FindXmasCount();
             return day4.Part1Count;
         }
@@ -60,7 +61,7 @@ namespace aoc.benchmarks
         [Benchmark]
         public int Day4Part2Benchmark()
         {
-            var day4 = new Day4(BasePath + 4 + Extension);
+            Day4 day4 = new(BasePath + 4 + Extension);
             day4.FindPart2Count();
             return day4.Part2Count;
         }
@@ -68,21 +69,21 @@ namespace aoc.benchmarks
         [Benchmark]
         public int Day5Part1Benchmark()
         {
-            var day5 = new Day5(BasePath + 5 + Extension);
+            Day5 day5 = new(BasePath + 5 + Extension);
             return day5.CalculatePart2();
         }
 
         [Benchmark]
         public int Day5Part2Benchmark()
         {
-            var day5 = new Day5(BasePath + 5 + Extension);
+            Day5 day5 = new(BasePath + 5 + Extension);
             return day5.CalculatePart2();
         }
         
         [Benchmark]
         public int Day6Part1Benchmark()
         {
-            var day6 = new Day6(BasePath + 6 + Extension);
+            Day6 day6 = new(BasePath + 6 + Extension);
             day6.Part1();
             return day6.VisitedLocationCount;
         }
@@ -90,7 +91,7 @@ namespace aoc.benchmarks
         [Benchmark]
         public int Day6Part2Benchmark()
         {
-            var day6 = new Day6(BasePath + 6 + Extension);
+            Day6 day6 = new(BasePath + 6 + Extension);
             day6.Part2();
             return day6.AmountOfLoops;
         }
@@ -98,17 +99,30 @@ namespace aoc.benchmarks
         [Benchmark]
         public long Day7Part1Benchmark()
         {
-            var day7 = new Day7(BasePath + 7 + Extension);
+            Day7 day7 = new(BasePath + 7 + Extension);
             return day7.Part1();
         }
         
         [Benchmark]
         public long Day7Part2Benchmark()
         {
-            var day7 = new Day7(BasePath + 7 + Extension);
+            Day7 day7 = new(BasePath + 7 + Extension);
             return day7.Part2();
         }
         
+        [Benchmark]
+        public long Day8Part1Benchmark()
+        {
+            Day8 day8 = new(BasePath + 8 + Extension);
+            return day8.Part1();
+        }
+        
+        [Benchmark]
+        public int Day8Part2Benchmark()
+        {
+            Day8 day8 = new(BasePath + 8 + Extension);
+            return day8.Part2();
+        }
         
         
     }

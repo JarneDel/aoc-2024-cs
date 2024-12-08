@@ -17,9 +17,9 @@ namespace aoc.day6
             int width = _map.GetLength(0) * cellSize;
             int height = _map.GetLength(1) * cellSize;
 
-            var info = new SKImageInfo(width, height, SKColorType.Rgba8888, SKAlphaType.Premul);
-            using var surface = SKSurface.Create(info);
-            var canvas = surface.Canvas;
+            SKImageInfo info = new(width, height, SKColorType.Rgba8888, SKAlphaType.Premul);
+            using SKSurface? surface = SKSurface.Create(info);
+            SKCanvas? canvas = surface.Canvas;
             canvas.Clear(SKColors.White);
 
             for (int x = 0; x < _map.GetLength(0); x++)
@@ -27,23 +27,23 @@ namespace aoc.day6
                 for (int y = 0; y < _map.GetLength(1); y++)
                 {
                     SKColor color = GetColorForEntity(_map[x, y]);
-                    using var paint = new SKPaint
+                    using SKPaint? paint = new()
                     {
                         Color = color,
                         Style = SKPaintStyle.Fill,
                         IsAntialias = false
                     };
 
-                    var rect = SKRect.Create(x * cellSize, y * cellSize, cellSize, cellSize);
+                    SKRect rect = SKRect.Create(x * cellSize, y * cellSize, cellSize, cellSize);
                     canvas.DrawRect(rect, paint);
                 }
             }
 
             canvas.Flush();
 
-            using var image = surface.Snapshot();
-            using var data = image.Encode(SKEncodedImageFormat.Jpeg, 100);
-            using var stream = File.OpenWrite(filePath);
+            using SKImage? image = surface.Snapshot();
+            using SKData? data = image.Encode(SKEncodedImageFormat.Jpeg, 100);
+            using FileStream? stream = File.OpenWrite(filePath);
             data.SaveTo(stream);
         }
 
