@@ -6,36 +6,71 @@ using aoc.day4;
 using aoc.day5;
 using aoc.day6;
 using BenchmarkDotNet.Running;
-
-#if DEBUG
+using System.Diagnostics;
 
 const string basePath = "./inputs/day";
 const string extension = ".txt";
-Console.WriteLine(await Day1.RunAsync(basePath + 1 + extension));
 
-Console.WriteLine(await Day2.Part1CalculationWithStreamReader(basePath + 2 + extension));
-Console.WriteLine(await Day2.Part2Calculation(basePath + 2 + extension));
+async Task LogExecutionTimeAsync(int day, int part, Func<Task<int>> func)
+{
+    Stopwatch stopwatch = Stopwatch.StartNew();
+    int result = await func();
+    stopwatch.Stop();
+    Console.WriteLine($"day{day}, part{part} ({stopwatch.ElapsedMilliseconds}ms): {result}");
+}
 
-Console.WriteLine(Day3.Part1CalculationFile(basePath + 3 + extension));
-Console.WriteLine(Day3.Part2CalculationFile(basePath + 3 + extension));
-var day4 = new Day4(basePath + 4 + extension);
-day4.FindPart2Count();
-day4.FindXmasCount();
-Console.WriteLine(day4.Part1Count);
-Console.WriteLine(day4.Part2Count);
-var day5 = new Day5(basePath + 5 + extension);
-Console.WriteLine(day5.CalculatePart1());
-Console.WriteLine(day5.CalculatePart2());
+async Task LogExecutionTimeAsyncString(int day, int part, Func<Task<string>> func)
+{
+    Stopwatch stopwatch = Stopwatch.StartNew();
+    string result = await func();
+    stopwatch.Stop();
+    Console.WriteLine($"day{day}, part{part} ({stopwatch.ElapsedMilliseconds}ms): {result}");
+}
 
-var day6 = new Day6(basePath + 6 + extension);
-day6.Part1();
-Console.WriteLine($"Part 1: {day6.VisitedLocationCount}");
+void LogExecutionTime(int day, int part, Func<int> func)
+{
+    Stopwatch stopwatch = Stopwatch.StartNew();
+    int result = func();
+    stopwatch.Stop();
+    Console.WriteLine($"day{day}, part{part} ({stopwatch.ElapsedMilliseconds}ms): {result}");
+}
+
+await LogExecutionTimeAsyncString(1, 1, async () => await Day1.RunAsync(basePath + 1 + extension));
+
+await LogExecutionTimeAsync(2, 1, async () => await Day2.Part1CalculationWithStreamReader(basePath + 2 + extension));
+await LogExecutionTimeAsync(2, 2, async () => await Day2.Part2Calculation(basePath + 2 + extension));
+
+LogExecutionTime(3, 1, () => Day3.Part1CalculationFile(basePath + 3 + extension));
+LogExecutionTime(3, 2, () => Day3.Part2CalculationFile(basePath + 3 + extension));
+
+Day4 day4 = new Day4(basePath + 4 + extension);
+LogExecutionTime(4, 1, () => {
+    day4.FindXmasCount();
+    return day4.Part1Count;
+});
+LogExecutionTime(4, 2, () => {
+    day4.FindPart2Count();
+    return day4.Part2Count;
+});
+
+Day5 day5 = new(basePath + 5 + extension);
+LogExecutionTime(5, 1, () => day5.CalculatePart1());
+LogExecutionTime(5, 2, () => day5.CalculatePart2());
+
+Day6 day6 = new(basePath + 6 + extension);
+LogExecutionTime(6, 1, () => {
+    day6.Part1();
+    return day6.VisitedLocationCount;
+});
+#if DEBUG
 new MapVisualizer(day6.Map).Save("./day6.jpg");
-day6.Part2();
-Console.WriteLine($"Part 2: {day6.AmountOfLoops}");
 #endif
+LogExecutionTime(6, 2, () => {
+    day6.Part2();
+    return day6.AmountOfLoops;
+});
 
 // only when release build
 #if !DEBUG
-    BenchmarkRunner.Run<DayBenchmarks>();
+BenchmarkRunner.Run<DayBenchmarks>();
 #endif
