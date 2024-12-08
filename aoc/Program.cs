@@ -8,6 +8,7 @@ using aoc.day6;
 using BenchmarkDotNet.Running;
 using System.Diagnostics;
 using aoc.day7;
+using aoc.day8;
 
 const string basePath = "./inputs/day";
 const string extension = ".txt";
@@ -82,6 +83,10 @@ LogExecutionTime(6, 2, () => {
 Day7 day7 = new(basePath + 7 + extension);
 LogExecutionTimeLong(7,1, () => day7.Part1());
 LogExecutionTimeLong(7,2, () => day7.Part2());
+
+Day8 day8 = new(basePath + 8 + extension);
+LogExecutionTime(8,1, () => day8.Part1());
+
 
 // only when release build
 #if !DEBUG

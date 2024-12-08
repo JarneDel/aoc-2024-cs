@@ -1,3 +1,5 @@
+using System.Numerics;
+
 namespace aoc.day6;
 
 public class Day6
