@@ -4,18 +4,16 @@ public class Day7
 {
     private readonly CalibrationEquation[] _calibrationEquations;
 
-
     public Day7(string[] input)
     {
-        CalibrationEquation[] parsed = ParseInput(input);
-        _calibrationEquations = parsed;
+        _calibrationEquations = ParseInput(input);
     }
 
     public Day7(string fileName)
     {
         _calibrationEquations = ParseInput(File.ReadAllLines(fileName));
     }
-    
+
     private static CalibrationEquation[] ParseInput(string[] input)
     {
         return input.Select(x => new CalibrationEquation(x)).ToArray();
@@ -28,8 +26,7 @@ public class Day7
         long part1Result = 0;
         Parallel.ForEach(_calibrationEquations, calibrationEquation =>
         {
-            List<List<char>> combinations = GetAllPossibleCombination(calibrationEquation.Length - 1, operators);
-            if (combinations.Any(combination => calibrationEquation.IsEqual(combination)))
+            if (FindValidCombination(calibrationEquation.Length - 1, operators, calibrationEquation))
             {
                 Interlocked.Add(ref part1Result, calibrationEquation.Solution);
             }
@@ -45,8 +42,7 @@ public class Day7
         long part2Result = 0;
         Parallel.ForEach(_calibrationEquations, calibrationEquation =>
         {
-            List<List<char>> combinations = GetAllPossibleCombination(calibrationEquation.Length - 1, operators);
-            if (combinations.Any(combination => calibrationEquation.IsEqual(combination)))
+            if (FindValidCombination(calibrationEquation.Length - 1, operators, calibrationEquation))
             {
                 Interlocked.Add(ref part2Result, calibrationEquation.Solution);
             }
@@ -55,28 +51,29 @@ public class Day7
         return part2Result;
     }
 
-
-
-    private List<List<char>> GetAllPossibleCombination(int length, char[] operators)
+    private bool FindValidCombination(int length, char[] operators, CalibrationEquation calibrationEquation)
     {
-        List<List<char>> result = [];
-        int totalCombinations = (int)Math.Pow(operators.Length, length);
+        return CheckCombination(length, operators, new List<char>(), calibrationEquation);
+    }
 
-        for (int i = 0; i < totalCombinations; i++)
+    private bool CheckCombination(int remainingLength, char[] operators, List<char> currentCombination, CalibrationEquation calibrationEquation)
+    {
+        if (remainingLength == 0)
         {
-            List<char> combination = [..new char[length]];
-            int temp = i;
-
-            for (int j = 0; j < length; j++)
-            {
-                combination[j] = operators[temp % operators.Length];
-                temp /= operators.Length;
-            }
-
-            result.Add(combination);
+            return calibrationEquation.IsEqual(currentCombination);
         }
 
-        return result;
+        foreach (char op in operators)
+        {
+            currentCombination.Add(op);
+            if (CheckCombination(remainingLength - 1, operators, currentCombination, calibrationEquation))
+            {
+                return true;
+            }
+            currentCombination.RemoveAt(currentCombination.Count - 1);
+        }
+
+        return false;
     }
 }
 
