@@ -7,6 +7,7 @@ using aoc.day5;
 using aoc.day6;
 using BenchmarkDotNet.Running;
 using System.Diagnostics;
+using aoc.day7;
 
 const string basePath = "./inputs/day";
 const string extension = ".txt";
@@ -31,6 +32,14 @@ void LogExecutionTime(int day, int part, Func<int> func)
 {
     Stopwatch stopwatch = Stopwatch.StartNew();
     int result = func();
+    stopwatch.Stop();
+    Console.WriteLine($"day{day}, part{part} ({stopwatch.ElapsedMilliseconds}ms): {result}");
+}
+
+void LogExecutionTimeLong(int day, int part, Func<long> func)
+{
+    Stopwatch stopwatch = Stopwatch.StartNew();
+    long result = func();
     stopwatch.Stop();
     Console.WriteLine($"day{day}, part{part} ({stopwatch.ElapsedMilliseconds}ms): {result}");
 }
@@ -69,6 +78,9 @@ LogExecutionTime(6, 2, () => {
     day6.Part2();
     return day6.AmountOfLoops;
 });
+
+Day7 day7 = new(basePath + 7 + extension);
+LogExecutionTimeLong(7,1, () => day7.Part1());
 
 // only when release build
 #if !DEBUG

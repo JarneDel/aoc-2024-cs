@@ -9,7 +9,7 @@ using BenchmarkDotNet.Engines;
 
 namespace aoc.benchmarks
 {
-    [MaxIterationCount(50)]
+    [MaxIterationCount(10)]
     [InvocationCount(5)]
     [SimpleJob(RunStrategy.Throughput)]
 
