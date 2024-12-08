@@ -2,50 +2,18 @@ namespace aoc.day7;
 
 public class Day7
 {
-    private static readonly char[] Operators = ['+', '*'];
-    public long Part1Result = 0;
-    private readonly CalibrationEquation[]? _calibrationEquations = null;
-    private readonly StreamReader? _streamReader = null;
-    
-    
+    private readonly CalibrationEquation[] _calibrationEquations;
+
+
     public Day7(string[] input)
     {
         CalibrationEquation[] parsed = ParseInput(input);
         _calibrationEquations = parsed;
-
     }
 
     public Day7(string fileName)
     {
-        _streamReader = new StreamReader(fileName);
-    }
-    
-    public long Part1()
-    {
-        if (_calibrationEquations != null)
-        {
-            foreach (CalibrationEquation calibrationEquation in _calibrationEquations)
-            {
-                List<List<char>> combinations = GetAllPossibleCombination(calibrationEquation.Length - 1);
-                if (combinations.Any(combination => calibrationEquation.IsEqual(combination)))
-                {
-                    Part1Result += calibrationEquation.Solution;
-                }
-            }
-        }
-        else if (_streamReader != null)
-        {
-            while (_streamReader.ReadLine() is { } line)
-            {
-                CalibrationEquation calibrationEquation = new(line);
-                List<List<char>> combinations = GetAllPossibleCombination(calibrationEquation.Length - 1);
-                if (combinations.Any(combination => calibrationEquation.IsEqual(combination)))
-                {
-                    Part1Result += calibrationEquation.Solution;
-                }
-            }
-        }
-        return Part1Result;
+        _calibrationEquations = ParseInput(File.ReadAllLines(fileName));
     }
     
     private static CalibrationEquation[] ParseInput(string[] input)
@@ -53,10 +21,46 @@ public class Day7
         return input.Select(x => new CalibrationEquation(x)).ToArray();
     }
 
-    private List<List<char>> GetAllPossibleCombination(int length)
+    public long Part1()
+    {
+        char[] operators = ['+', '*'];
+        
+        long part1Result = 0;
+        Parallel.ForEach(_calibrationEquations, calibrationEquation =>
+        {
+            List<List<char>> combinations = GetAllPossibleCombination(calibrationEquation.Length - 1, operators);
+            if (combinations.Any(combination => calibrationEquation.IsEqual(combination)))
+            {
+                Interlocked.Add(ref part1Result, calibrationEquation.Solution);
+            }
+        });
+
+        return part1Result;
+    }
+    
+    public long Part2()
+    {
+        char[] operators = ['+', '*', '|'];
+
+        long part2Result = 0;
+        Parallel.ForEach(_calibrationEquations, calibrationEquation =>
+        {
+            List<List<char>> combinations = GetAllPossibleCombination(calibrationEquation.Length - 1, operators);
+            if (combinations.Any(combination => calibrationEquation.IsEqual(combination)))
+            {
+                Interlocked.Add(ref part2Result, calibrationEquation.Solution);
+            }
+        });
+
+        return part2Result;
+    }
+
+
+
+    private List<List<char>> GetAllPossibleCombination(int length, char[] operators)
     {
         List<List<char>> result = [];
-        int totalCombinations = (int)Math.Pow(Operators.Length, length);
+        int totalCombinations = (int)Math.Pow(operators.Length, length);
 
         for (int i = 0; i < totalCombinations; i++)
         {
@@ -65,9 +69,8 @@ public class Day7
 
             for (int j = 0; j < length; j++)
             {
-                
-                combination[j] = Operators[temp % Operators.Length];
-                temp /= Operators.Length;
+                combination[j] = operators[temp % operators.Length];
+                temp /= operators.Length;
             }
 
             result.Add(combination);
@@ -75,12 +78,6 @@ public class Day7
 
         return result;
     }
-
-
-
-    
-    
-    
 }
 
 public struct CalibrationEquation
@@ -91,17 +88,11 @@ public struct CalibrationEquation
         Solution = long.Parse(split[0]);
         Numbers = split[1].Split([' '], StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
     }
-    public CalibrationEquation(int solution, int[] numbers)
-    {
-        Solution = solution;
-        Numbers = numbers;
-    }
-    
     public long Solution { get; set; }
     public int[] Numbers { get; set; }
 
     public int Length => Numbers.Length;
-    
+
 
     public bool IsEqual(List<char> operators)
     {
@@ -113,12 +104,11 @@ public struct CalibrationEquation
             {
                 '*' => betweenResult * Numbers[i + 1],
                 '+' => betweenResult + Numbers[i + 1],
+                '|' => long.Parse($"{betweenResult}{Numbers[i + 1]}"),
                 _ => throw new ArgumentOutOfRangeException(operators[i].ToString())
             };
         }
-        return betweenResult == Solution;
 
+        return betweenResult == Solution;
     }
-    
-    
 }

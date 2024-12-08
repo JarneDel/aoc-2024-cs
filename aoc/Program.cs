@@ -81,6 +81,7 @@ LogExecutionTime(6, 2, () => {
 
 Day7 day7 = new(basePath + 7 + extension);
 LogExecutionTimeLong(7,1, () => day7.Part1());
+LogExecutionTimeLong(7,2, () => day7.Part2());
 
 // only when release build
 #if !DEBUG

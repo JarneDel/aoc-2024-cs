@@ -93,4 +93,5 @@ public class Day7Tests
         long result = day7.Part1();
         Assert.That(result, Is.EqualTo(27658973736));
     }
+    
 }

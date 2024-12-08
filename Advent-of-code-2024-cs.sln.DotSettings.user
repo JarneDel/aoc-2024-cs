@@ -33,6 +33,7 @@
     &lt;TestId&gt;NUnit3x::7E7CB0B6-9D29-4F9F-AEB5-A25419BD9E3B::net9.0::aoc.test.Day7Tests.Day1Line2&lt;/TestId&gt;
     &lt;TestId&gt;NUnit3x::7E7CB0B6-9D29-4F9F-AEB5-A25419BD9E3B::net9.0::aoc.test.Day7Tests.Day1Line7&lt;/TestId&gt;
     &lt;TestId&gt;NUnit3x::7E7CB0B6-9D29-4F9F-AEB5-A25419BD9E3B::net9.0::aoc.test.Day7Tests.Day1First100&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::7E7CB0B6-9D29-4F9F-AEB5-A25419BD9E3B::net9.0::aoc.test.Day7Tests.TestConcat&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
 	</wpf:ResourceDictionary>
