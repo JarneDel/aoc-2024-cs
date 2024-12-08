@@ -5,6 +5,7 @@ using aoc.day3;
 using aoc.day4;
 using aoc.day5;
 using aoc.day6;
+using aoc.day7;
 using BenchmarkDotNet.Engines;
 
 namespace aoc.benchmarks
@@ -93,6 +94,22 @@ namespace aoc.benchmarks
             day6.Part2();
             return day6.AmountOfLoops;
         }
+        
+        [Benchmark]
+        public long Day7Part1Benchmark()
+        {
+            var day7 = new Day7(BasePath + 7 + Extension);
+            return day7.Part1();
+        }
+        
+        [Benchmark]
+        public long Day7Part2Benchmark()
+        {
+            var day7 = new Day7(BasePath + 7 + Extension);
+            return day7.Part2();
+        }
+        
+        
         
     }
 }
