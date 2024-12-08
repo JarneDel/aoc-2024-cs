@@ -11,7 +11,7 @@ using BenchmarkDotNet.Engines;
 namespace aoc.benchmarks
 {
     [MaxIterationCount(20)]
-    [InvocationCount(1)]
+    [InvocationCount(5)]
     [SimpleJob(RunStrategy.Throughput)]
 
     public class DayBenchmarks

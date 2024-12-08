@@ -101,11 +101,24 @@ public struct CalibrationEquation
             {
                 '*' => betweenResult * Numbers[i + 1],
                 '+' => betweenResult + Numbers[i + 1],
-                '|' => long.Parse($"{betweenResult}{Numbers[i + 1]}"),
+                '|' => betweenResult * GetMultiplier(Numbers[i + 1]) + Numbers[i + 1],
                 _ => throw new ArgumentOutOfRangeException(operators[i].ToString())
             };
         }
 
         return betweenResult == Solution;
     }
+    
+    
+    private static long GetMultiplier(int number)
+    {
+        long multiplier = 1;
+        while (number >= 10)
+        {
+            multiplier *= 10;
+            number /= 10;
+        }
+        return multiplier;
+    }
+
 }
