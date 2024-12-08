@@ -23,7 +23,7 @@ public class Day6Tests
     [Test]
     public void Day6Part1()
     {
-        var day6 = new Day6(_map);
+        Day6? day6 = new(_map);
         day6.Part1();
         Assert.That(day6.VisitedLocationCount, Is.EqualTo(41));
     }
@@ -32,7 +32,7 @@ public class Day6Tests
     [Test]
     public void Day6Part2()
     {
-        var day6 = new Day6(_map);
+        Day6? day6 = new(_map);
         day6.Part2();
         Assert.That(day6.AmountOfLoops, Is.EqualTo(6));
     }
@@ -40,7 +40,7 @@ public class Day6Tests
     [Test]
     public void Day6Part2WithFullMap()
     {
-        var day6 = new Day6("./inputs/day6.txt");
+        Day6? day6 = new("./inputs/day6.txt");
         
         Assert.That(day6.Part2(), Is.EqualTo(1911));
     }

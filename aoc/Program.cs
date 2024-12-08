@@ -8,6 +8,7 @@ using aoc.day6;
 using BenchmarkDotNet.Running;
 using System.Diagnostics;
 using aoc.day7;
+using aoc.day8;
 
 const string basePath = "./inputs/day";
 const string extension = ".txt";
@@ -52,7 +53,7 @@ await LogExecutionTimeAsync(2, 2, async () => await Day2.Part2Calculation(basePa
 LogExecutionTime(3, 1, () => Day3.Part1CalculationFile(basePath + 3 + extension));
 LogExecutionTime(3, 2, () => Day3.Part2CalculationFile(basePath + 3 + extension));
 
-Day4 day4 = new Day4(basePath + 4 + extension);
+Day4 day4 = new(basePath + 4 + extension);
 LogExecutionTime(4, 1, () => {
     day4.FindXmasCount();
     return day4.Part1Count;
@@ -82,6 +83,11 @@ LogExecutionTime(6, 2, () => {
 Day7 day7 = new(basePath + 7 + extension);
 LogExecutionTimeLong(7,1, () => day7.Part1());
 LogExecutionTimeLong(7,2, () => day7.Part2());
+
+Day8 day8 = new(basePath + 8 + extension);
+LogExecutionTime(8,1, () => day8.Part1());
+LogExecutionTime(8,1, () => day8.Part2());
+
 
 // only when release build
 #if !DEBUG

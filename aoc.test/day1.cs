@@ -10,7 +10,7 @@ public class Tests
     public void Day1_Success()
     {
         const int expected = 11;
-        var result = Day1.AddDistances(_leftList, _rightList);
+        int result = Day1.AddDistances(_leftList, _rightList);
         Assert.That(result, Is.EqualTo(expected));
     }
 
