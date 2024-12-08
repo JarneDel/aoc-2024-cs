@@ -111,7 +111,7 @@ public class Day8
         return position.X >= 0 && position.X < _map.GetLength(0) && position.Y >= 0 && position.Y < _map.GetLength(1);
     }
 
-    public (Vector2Int, Vector2Int) CalculateNodeLocations(Vector2Int antenna1, Vector2Int antenna2)
+    private (Vector2Int, Vector2Int) CalculateNodeLocations(Vector2Int antenna1, Vector2Int antenna2)
     {
         // Vector between the antennas
         int deltaX = antenna2.X - antenna1.X;
@@ -124,7 +124,7 @@ public class Day8
         return (node1, node2);
     }
 
-    public List<Vector2Int> CalculateNodeLocationsExtended(Vector2Int antenna1, Vector2Int antenna2)
+    private List<Vector2Int> CalculateNodeLocationsExtended(Vector2Int antenna1, Vector2Int antenna2)
     {
         // replace itself with antinode
         List<Vector2Int> list = [antenna1, antenna2];
