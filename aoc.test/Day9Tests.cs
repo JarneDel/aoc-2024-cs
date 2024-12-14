@@ -34,4 +34,12 @@ public class Day9Tests
         long checksum = day9.ConvertToBlocks().Optimize().CalculateChecksum();
         Assert.That(checksum, Is.EqualTo(1928));
     }
+
+    [Test]
+    public void Part2()
+    {
+        var day9 = new Day9(_diskmap);
+        long checksum = day9.ConvertToBlocks().OptimizePart2().CalculateChecksum();
+        Assert.That(checksum, Is.EqualTo(2858));
+    }
 }

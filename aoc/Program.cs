@@ -85,6 +85,7 @@ Execute(8,1, () => day8.Part2());
 
 Day9 day9 = new(null,basePath + 9 + extension);
 Execute(9,1, () => day9.ConvertToBlocks().Optimize().CalculateChecksum());
+Execute(9,2, () => day9.ConvertToBlocks().OptimizePart2().CalculateChecksum());
 
 if (noBenchmark) Process.GetCurrentProcess().Kill();
 // only when release build

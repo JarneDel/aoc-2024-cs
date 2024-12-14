@@ -1,4 +1,5 @@
 using System.Text;
+using SixLabors.ImageSharp.ColorSpaces;
 
 namespace aoc.day9;
 
@@ -7,6 +8,7 @@ public class Day9
     private readonly string _diskmap;
     public  string Blocks = string.Empty;
     public string OptimizedBlocks = string.Empty;
+    public List<Block> FileSystem = [];
 
     public Day9(string? input, string? filename = null)
     {
@@ -35,6 +37,90 @@ public class Day9
 
         Blocks = stringBuilder.ToString();
         return this;
+    }
+    
+    public Day9 OptimizePart2()
+    {
+        char[] blocks = Blocks.ToCharArray();
+        StringBuilder stringBuilder = new();
+        int reverseIndex = blocks.Length - 1;
+        bool isFirstPass = true;
+        for (int i = 0; i < blocks.Length;)
+        {
+            if (reverseIndex < i)
+            {
+                i = 0;
+            }
+
+            if (reverseIndex == 0)
+            {
+                break;
+            }
+
+            char c = blocks[i];
+            if (c != '.')
+            {
+                if (isFirstPass) stringBuilder.Append(c);
+                i++;
+                continue;
+            }
+
+            short freeSpace = 0;
+            while (blocks[i + freeSpace] == '.')
+            {
+                freeSpace++;
+            }
+            Console.WriteLine($"Free space: {freeSpace}");
+
+            AppendBlock(stringBuilder, ref i, ref reverseIndex, freeSpace, ref blocks);
+        }
+        
+        // add remainder of the blocks to the string starting at reverseIndex
+        stringBuilder.Append(blocks, reverseIndex + 1, blocks.Length - reverseIndex - 1);
+        OptimizedBlocks = stringBuilder.ToString();
+        Console.WriteLine(OptimizedBlocks);
+        return this;
+    }
+
+    private void AppendBlock(StringBuilder stringBuilder, ref int i, ref int reverseIndex, int freeSpace, ref char[] blocks)
+    {
+        while (true)
+        {
+            if (reverseIndex < 0)
+            {
+                break;
+            }
+            
+            if (blocks[reverseIndex] == '.')
+            {
+                reverseIndex--;
+                continue;
+            }
+            int blockLength = 1;
+            while (reverseIndex - blockLength >= 0 && blocks[reverseIndex - blockLength] == blocks[reverseIndex])
+            {
+                blockLength++;
+            }
+            Console.WriteLine($"Block length: {blockLength}");
+
+            if (blockLength <= freeSpace)
+            {
+                Console.WriteLine($"Appending {blocks[reverseIndex]} {blockLength} times with {freeSpace - blockLength} free space");
+                stringBuilder.Append(blocks[reverseIndex], blockLength);
+                stringBuilder.Append('.', freeSpace - blockLength);
+                // replace the block with dots
+                for (int j = 0; j < blockLength; j++)
+                {
+                    blocks[reverseIndex - j] = '.';
+                }
+                reverseIndex -= blockLength;
+                i += freeSpace;
+                Console.WriteLine($"Moved I to {i} and reverseIndex to {reverseIndex}");
+                break;
+            }
+            
+            reverseIndex -= blockLength;
+        }
     }
 
     public Day9 Optimize()
@@ -83,4 +169,12 @@ public class Day9
 
         return product;
     }
+}
+
+
+public struct Block(char id, int start, int length)
+{
+    public char Id { get; } = id;
+    public int Start { get; } = start;
+    public int Length { get; } = length;
 }
