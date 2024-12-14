@@ -7,6 +7,7 @@ using aoc.day5;
 using aoc.day6;
 using aoc.day7;
 using aoc.day8;
+using aoc.day9;
 using BenchmarkDotNet.Engines;
 
 namespace aoc.benchmarks
@@ -122,6 +123,13 @@ namespace aoc.benchmarks
         {
             Day8 day8 = new(BasePath + 8 + Extension);
             return day8.Part2();
+        }
+        
+        [Benchmark]
+        public long Day9Part1Benchmark()
+        {
+            Day9 day9 = new(null, BasePath + 9 + Extension);
+            return day9.ConvertToBlocks().Optimize().CalculateChecksum();
         }
         
         
