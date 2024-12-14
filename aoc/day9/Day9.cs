@@ -8,7 +8,8 @@ public class Day9
     private readonly string _diskmap;
     public  string Blocks = string.Empty;
     public string OptimizedBlocks = string.Empty;
-    public List<Block> FileSystem = [];
+    private readonly List<FileBlock> _fileData = new();
+    public List<FileBlock> OptimizedFileData { get; private set; } = new();
 
     public Day9(string? input, string? filename = null)
     {
@@ -19,6 +20,7 @@ public class Day9
     {
         StringBuilder stringBuilder = new();
         char index = '0';
+        short indexNumber = 0;
         for (int i = 0; i < _diskmap.Length; i++)
         {
             char c = _diskmap[i];
@@ -27,7 +29,9 @@ public class Day9
             if (isEven)
             {
                 stringBuilder.Append(index, count);
+                _fileData.Add(new FileBlock(indexNumber, stringBuilder.Length, count));
                 index++;
+                indexNumber++;
             }
             else if (i != _diskmap.Length - 1)
             {
@@ -41,87 +45,72 @@ public class Day9
     
     public Day9 OptimizePart2()
     {
-        char[] blocks = Blocks.ToCharArray();
-        StringBuilder stringBuilder = new();
-        int reverseIndex = blocks.Length - 1;
-        bool isFirstPass = true;
-        for (int i = 0; i < blocks.Length;)
+        List<FreeSpace> freeSpaces = GetFreeSpaceSpans();
+
+        // Sort files by descending ID
+        _fileData.Sort((a, b) => b.Id.CompareTo(a.Id));
+
+        for (int i = 0; i < _fileData.Count; i++)
         {
-            if (reverseIndex < i)
-            {
-                i = 0;
-            }
+            var file = _fileData[i];
 
-            if (reverseIndex == 0)
+            foreach (var space in freeSpaces)
             {
-                break;
-            }
+                if (space.Length >= file.Length)
+                {
+                    // Create a new updated struct
+                    _fileData[i] = file.WithStart(space.Start);
 
-            char c = blocks[i];
-            if (c != '.')
-            {
-                if (isFirstPass) stringBuilder.Append(c);
-                i++;
-                continue;
+                    // Update free space list
+                    UpdateFreeSpaces(freeSpaces, space, file.Length);
+                    break;
+                }
             }
-
-            short freeSpace = 0;
-            while (blocks[i + freeSpace] == '.')
-            {
-                freeSpace++;
-            }
-            Console.WriteLine($"Free space: {freeSpace}");
-
-            AppendBlock(stringBuilder, ref i, ref reverseIndex, freeSpace, ref blocks);
         }
-        
-        // add remainder of the blocks to the string starting at reverseIndex
-        stringBuilder.Append(blocks, reverseIndex + 1, blocks.Length - reverseIndex - 1);
-        OptimizedBlocks = stringBuilder.ToString();
-        Console.WriteLine(OptimizedBlocks);
+
+        OptimizedFileData = new List<FileBlock>(_fileData);
         return this;
     }
-
-    private void AppendBlock(StringBuilder stringBuilder, ref int i, ref int reverseIndex, int freeSpace, ref char[] blocks)
+    
+    private List<FreeSpace> GetFreeSpaceSpans()
     {
-        while (true)
-        {
-            if (reverseIndex < 0)
-            {
-                break;
-            }
-            
-            if (blocks[reverseIndex] == '.')
-            {
-                reverseIndex--;
-                continue;
-            }
-            int blockLength = 1;
-            while (reverseIndex - blockLength >= 0 && blocks[reverseIndex - blockLength] == blocks[reverseIndex])
-            {
-                blockLength++;
-            }
-            Console.WriteLine($"Block length: {blockLength}");
+        List<FreeSpace> freeSpaces = new();
 
-            if (blockLength <= freeSpace)
+        int start = 0;
+        for (int i = 0; i < _diskmap.Length;)
+        {
+            if (_fileData.Exists(f => f.Start == i))
             {
-                Console.WriteLine($"Appending {blocks[reverseIndex]} {blockLength} times with {freeSpace - blockLength} free space");
-                stringBuilder.Append(blocks[reverseIndex], blockLength);
-                stringBuilder.Append('.', freeSpace - blockLength);
-                // replace the block with dots
-                for (int j = 0; j < blockLength; j++)
-                {
-                    blocks[reverseIndex - j] = '.';
-                }
-                reverseIndex -= blockLength;
-                i += freeSpace;
-                Console.WriteLine($"Moved I to {i} and reverseIndex to {reverseIndex}");
-                break;
+                var block = _fileData.First(f => f.Start == i);
+                i += block.Length;
+                start = i;
             }
-            
-            reverseIndex -= blockLength;
+            else
+            {
+                int spaceStart = i;
+                while (i < _diskmap.Length && !_fileData.Exists(f => f.Start == i))
+                {
+                    i++;
+                }
+                freeSpaces.Add(new FreeSpace(spaceStart, i - spaceStart));
+            }
         }
+
+        return freeSpaces;
     }
+
+    private void UpdateFreeSpaces(List<FreeSpace> freeSpaces, FreeSpace space, int usedLength)
+    {
+        freeSpaces.Remove(space);
+
+        if (usedLength < space.Length)
+        {
+            freeSpaces.Add(new FreeSpace(space.Start + usedLength, space.Length - usedLength));
+        }
+
+        freeSpaces.Sort((a, b) => a.Start.CompareTo(b.Start)); // Maintain order
+    }
+    
 
     public Day9 Optimize()
     {
@@ -169,12 +158,68 @@ public class Day9
 
         return product;
     }
+    
+    public long CalculateChecksumPart2()
+    {
+        long product = 0;
+
+        foreach (var file in OptimizedFileData)
+        {
+            for (int i = 0; i < file.Length; i++)
+            {
+                product += (file.Id - '0') * (file.Start + i);
+            }
+        }
+
+        return product;
+    }
 }
 
 
-public struct Block(char id, int start, int length)
+public readonly struct FileBlock
 {
-    public char Id { get; } = id;
-    public int Start { get; } = start;
-    public int Length { get; } = length;
+    public short Id { get; }
+    public int Start { get; }
+    public int Length { get; }
+
+    public FileBlock(short id, int start, int length)
+    {
+        Id = id;
+        Start = start;
+        Length = length;
+    }
+
+    public FileBlock WithStart(int newStart) => new FileBlock(Id, newStart, Length);
+}
+
+
+public struct FreeSpace(int start, int length) : IEquatable<FreeSpace>
+{
+    public int Start { get; set; } = start;
+    public int Length { get; set; } = length;
+
+    public bool Equals(FreeSpace other)
+    {
+        return Start == other.Start && Length == other.Length;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is FreeSpace other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Start, Length);
+    }
+
+    public static bool operator ==(FreeSpace left, FreeSpace right)
+    {
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(FreeSpace left, FreeSpace right)
+    {
+        return !(left == right);
+    }
 }
